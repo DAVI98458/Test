@@ -1,0 +1,120 @@
+-- Copia o link da key automaticamente ao executar
+setclipboard("https://loot-link.com/s?pUr4nLxX")
+
+-- Carrega a biblioteca Rayfield
+local Rayfield = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
+
+-- Criação da janela principal
+local Window = Rayfield:CreateWindow({
+    Name = "teste(Idk)",
+    LoadingTitle = "teste(Idk)",
+    LoadingSubtitle = "by @coroadinho_37203",
+    ConfigurationSaving = {
+        Enabled = true,
+        FolderName = "IdkScript",
+        FileName = "Settings"
+    },
+    KeySystem = true,
+    KeySettings = {
+        Title = "Sistema de Key",
+        Subtitle = "Insira a chave correta",
+        Note = "o link ja foi copiado com sucesso.",
+        FileName = "KeyScript",
+        SaveKey = true,
+        GrabKeyFromSite = false,
+        Key = "gracias"
+    }
+})
+
+-- Aba principal
+local MainTab = Window:CreateTab("Main", 4483362458)
+
+MainTab:CreateButton({
+    Name = "Anti-Cheat",
+    Callback = function()
+        local mt = getrawmetatable(game)
+        setreadonly(mt, false)
+        local old = mt.__namecall
+        mt.__namecall = newcclosure(function(self, ...)
+            if getnamecallmethod() == "Kick" then return nil end
+            return old(self, ...)
+        end)
+        setreadonly(mt, true)
+        Rayfield:Notify({
+            Title = "Anti-Cheat",
+            Content = "Sistema ativado com sucesso.",
+            Duration = 4
+        })
+    end
+})
+
+MainTab:CreateButton({
+    Name = "ESP (Inimigos/Aliados com Nicks)",
+    Callback = function()
+        for _, player in pairs(game.Players:GetPlayers()) do
+            if player ~= game.Players.LocalPlayer and player.Character and player.Character:FindFirstChild("Head") then
+                local existing = player.Character.Head:FindFirstChild("ESPLabel")
+                if existing then existing:Destroy() end
+
+                local Billboard = Instance.new("BillboardGui")
+                Billboard.Name = "ESPLabel"
+                Billboard.Size = UDim2.new(0, 100, 0, 40)
+                Billboard.StudsOffset = Vector3.new(0, 2, 0)
+                Billboard.AlwaysOnTop = true
+                Billboard.Parent = player.Character.Head
+
+                local Text = Instance.new("TextLabel")
+                Text.Size = UDim2.new(1, 0, 1, 0)
+                Text.BackgroundTransparency = 1
+                Text.Text = player.Name
+                Text.TextColor3 = (player.Team == game.Players.LocalPlayer.Team) and Color3.new(0, 0, 1) or Color3.new(1, 0, 0)
+                Text.TextScaled = true
+                Text.Parent = Billboard
+            end
+        end
+    end
+})
+
+MainTab:CreateButton({
+    Name = "Teleport Tool",
+    Callback = function()
+        if game.Players.LocalPlayer.Backpack:FindFirstChild("tp") then return end
+
+        local tool = Instance.new("Tool")
+        tool.Name = "tp"
+        tool.RequiresHandle = false
+        tool.CanBeDropped = false
+
+        tool.Activated:Connect(function()
+            local mouse = game.Players.LocalPlayer:GetMouse()
+            local pos = mouse.Hit and mouse.Hit.p
+            if pos then
+                local char = game.Players.LocalPlayer.Character
+                if char and char:FindFirstChild("HumanoidRootPart") then
+                    char:SetPrimaryPartCFrame(CFrame.new(pos))
+                end
+            end
+        end)
+
+        tool.Parent = game.Players.LocalPlayer.Backpack
+
+        Rayfield:Notify({
+            Title = "Teleport Tool",
+            Content = "Ferramenta adicionada à mochila!",
+            Duration = 3
+        })
+    end
+})
+
+-- Aba de créditos
+local CreditsTab = Window:CreateTab("Credits", 4483345998)
+
+CreditsTab:CreateParagraph({
+    Title = "Direitor:",
+    Content = "@coroadinho_37203"
+})
+
+CreditsTab:CreateParagraph({
+    Title = "Programador:",
+    Content = "@coroadinho_37203 and @Shadownchavoso"
+})
