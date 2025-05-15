@@ -20,7 +20,7 @@ local Window = Rayfield:CreateWindow({
         Subtitle = "Insira a chave correta",
         Note = "o link ja foi copiado com sucesso.",
         FileName = "KeyScript",
-        SaveKey = true,
+        SaveKey = false,
         GrabKeyFromSite = false,
         Key = "gracias"
     }
